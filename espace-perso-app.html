@@ -102,8 +102,18 @@
         // Espace Notion publié du festival : chaque personne a sa propre page Notion,
         // identifiée par le slug présent dans l'URL /espace-perso/<slug>.
         // Ex. /espace-perso/Ju-test-YALLAH-37586e57ca1b81e2a75defff5550d222
-        //   -> https://onestpret.notion.site/Ju-test-YALLAH-37586e57ca1b81e2a75defff5550d222
-        var NOTION_BASE = "https://onestpret.notion.site/";
+        //
+        // IMPORTANT : Notion n'autorise l'iframe QUE via son endpoint /ebd/<pageId>
+        // (frame-ancestors https:). L'URL de page publiée (notion.site/<slug>) renvoie
+        // x-frame-options: SAMEORIGIN et refuse l'embed. On embarque donc /ebd/<pageId>,
+        // où pageId = les 32 caractères hexadécimaux à la fin du slug.
+        var NOTION_EMBED_BASE = "https://onestpret.notion.site/ebd/";
+
+        function notionEmbedUrl(slug) {
+            var match = String(slug).match(/[0-9a-f]{32}$/i);
+            var pageId = match ? match[0] : slug;
+            return NOTION_EMBED_BASE + pageId;
+        }
 
         // Slug = segment après /espace-perso/ ; sinon on reprend celui mémorisé.
         var segments = window.location.pathname.split("/").filter(Boolean); // ex. ["espace-perso", "Ju-..."]
@@ -117,7 +127,7 @@
         }
 
         if (slug) {
-            document.getElementById("espace-frame").src = NOTION_BASE + encodeURIComponent(slug);
+            document.getElementById("espace-frame").src = notionEmbedUrl(slug);
             document.getElementById("embed").style.display = "block";
         } else {
             document.getElementById("message").style.display = "block";
