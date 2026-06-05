@@ -1,2 +1,5 @@
+# Règle témoin de diagnostic (à retirer)
+/__rtest  /espace-perso/  302
+
 # Sert /profil/index.html pour toute URL /profil/<profil-ID> (réécriture, code 200)
 /profil/*  /profil/index.html  200
