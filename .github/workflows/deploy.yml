@@ -1,0 +1,28 @@
+name: Déploiement Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main
+  # Permet de lancer le déploiement manuellement depuis l'onglet Actions
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  deployments: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Publier sur Cloudflare Pages
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Déployer sur Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # "." = on publie la racine du dépôt (site statique sans build)
+          command: pages deploy . --project-name=festival-declic --branch=main
