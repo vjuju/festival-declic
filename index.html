@@ -4,68 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Festival Déclic</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="preload" href="/fonts/Folsom-Black.otf" as="font" type="font/otf" crossorigin>
+    <style>
+        @font-face {
+            font-family: 'Folsom';
+            src: url('/fonts/Folsom-Black.otf') format('opentype');
+            font-display: swap;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            background: #000;
+            color: #5ECBA1;
+            font-family: 'Folsom', Impact, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .title {
+            font-size: clamp(48px, 14vw, 160px);
+            line-height: 1;
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
+        }
+
+        .date {
+            margin-top: clamp(1rem, 3vw, 2rem);
+            font-size: clamp(18px, 5vw, 42px);
+            line-height: 1.2;
+            letter-spacing: 0.02em;
+        }
+
+        .espace-link {
+            position: fixed;
+            bottom: 1.25rem;
+            right: 1.5rem;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #5ECBA1;
+            opacity: 0.55;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .espace-link:hover {
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">Festival Déclic</div>
-            <ul>
-                <li><a href="#about">Le Festival</a></li>
-                <li><a href="#programme">Programme</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <li><a href="/espace-perso/">Espace perso</a></li>
-            </ul>
-        </nav>
-    </header>
+    <h1 class="title">Festival Déclic</h1>
+    <p class="date">29 juin 2026 – 1 juillet 2026</p>
 
-    <main>
-        <section class="hero">
-            <div class="hero-content">
-                <h1>Festival Déclic</h1>
-                <p class="tagline">Le festival qui éveille les consciences et met en mouvement</p>
-                <a href="#about" class="cta">Découvrir</a>
-            </div>
-        </section>
-
-        <section id="about" class="about">
-            <h2>Bienvenue au Festival Déclic</h2>
-            <p>
-                Le Festival Déclic est un événement unique dédié à celles et ceux qui veulent
-                comprendre les enjeux de notre époque et passer à l'action. Pendant plusieurs jours,
-                conférences, ateliers, projections et moments de convivialité se succèdent pour
-                provoquer le déclic dont nous avons besoin.
-            </p>
-            <div class="values">
-                <div class="value-card">
-                    <h3>Comprendre</h3>
-                    <p>Des interventions éclairantes pour saisir les défis environnementaux et sociaux.</p>
-                </div>
-                <div class="value-card">
-                    <h3>Rencontrer</h3>
-                    <p>Un espace de rencontres entre citoyens, associations et acteurs du changement.</p>
-                </div>
-                <div class="value-card">
-                    <h3>Agir</h3>
-                    <p>Des ateliers pratiques pour repartir avec des outils concrets d'action.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="programme" class="programme">
-            <h2>Programme</h2>
-            <p class="coming-soon">Le programme complet sera bientôt disponible. Restez connectés !</p>
-        </section>
-
-        <section id="contact" class="contact">
-            <h2>Contact</h2>
-            <p>Une question ? Envie de participer ou de devenir bénévole ?</p>
-            <p>Écrivez-nous à <a href="mailto:contact@festivaldeclic.fr">contact@festivaldeclic.fr</a></p>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2026 Festival Déclic. Tous droits réservés.</p>
-    </footer>
+    <a class="espace-link" href="/espace-perso/">Espace perso</a>
 </body>
 </html>
