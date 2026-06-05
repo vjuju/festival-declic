@@ -1,2 +1,2 @@
-# Sert profil-app.html pour toute URL /profil/<profil-ID> (réécriture, code 200)
-/profil/*  /profil-app.html  200
+# Sert espace-perso-app.html pour /espace-perso/ et /espace-perso/<slug> (réécriture, code 200)
+/espace-perso/*  /espace-perso-app.html  200
