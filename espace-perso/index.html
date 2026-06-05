@@ -105,14 +105,15 @@
     </div>
 
     <script>
-        // Page Notion embarquée dans l'Espace perso (publiée sur le web).
-        var NOTION_PROFILE_URL = "https://onestpret.notion.site/37586e57ca1b81e2a75defff5550d222?v=37586e57ca1b80408f02000caaa6bad0";
+        // Espace Notion publié du festival : chaque profil = une page Notion dont
+        // l'identifiant est le profil-ID stocké lors du clic sur le lien du mail.
+        var NOTION_BASE = "https://onestpret.notion.site/";
 
         var profilId = "";
         try { profilId = localStorage.getItem("declicProfilId") || ""; } catch (e) {}
 
         if (profilId) {
-            document.getElementById("profil-frame").src = NOTION_PROFILE_URL;
+            document.getElementById("profil-frame").src = NOTION_BASE + encodeURIComponent(profilId);
             document.getElementById("embed").style.display = "block";
         } else {
             document.getElementById("message").style.display = "block";

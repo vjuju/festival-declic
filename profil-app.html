@@ -28,8 +28,9 @@
     <iframe id="profil-frame" allowfullscreen title="Espace perso — Festival Déclic"></iframe>
 
     <script>
-        // Page Notion embarquée dans l'Espace perso (publiée sur le web).
-        var NOTION_PROFILE_URL = "https://onestpret.notion.site/37586e57ca1b81e2a75defff5550d222?v=37586e57ca1b80408f02000caaa6bad0";
+        // Espace Notion publié du festival : chaque profil = une page Notion dont
+        // l'identifiant est le profil-ID. L'embed pointe vers la page de la personne.
+        var NOTION_BASE = "https://onestpret.notion.site/";
 
         // L'ID de profil est le dernier segment de l'URL : /profil/<profil-ID>
         // (avec repli sur ?id=<profil-ID> au cas où).
@@ -42,7 +43,7 @@
         if (profilId) {
             // On mémorise le profil pour les prochaines visites (onglet « Espace perso »).
             try { localStorage.setItem("declicProfilId", profilId); } catch (e) {}
-            document.getElementById("profil-frame").src = NOTION_PROFILE_URL;
+            document.getElementById("profil-frame").src = NOTION_BASE + encodeURIComponent(profilId);
         } else {
             // Pas d'ID : on renvoie vers la page Espace perso classique.
             window.location.replace("/espace-perso/");
