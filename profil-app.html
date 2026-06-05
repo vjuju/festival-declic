@@ -32,15 +32,19 @@
         var NOTION_PROFILE_URL = "https://onestpret.notion.site/37586e57ca1b81e2a75defff5550d222?v=37586e57ca1b80408f02000caaa6bad0";
 
         // L'ID de profil est le dernier segment de l'URL : /profil/<profil-ID>
+        // (avec repli sur ?id=<profil-ID> au cas où).
         var segments = window.location.pathname.split("/").filter(Boolean); // ex. ["profil", "abc123"]
-        var profilId = segments[1] || "";
+        var profilId = (segments[0] === "profil" && segments[1]) ? segments[1] : "";
+        if (!profilId) {
+            profilId = new URLSearchParams(window.location.search).get("id") || "";
+        }
 
         if (profilId) {
             // On mémorise le profil pour les prochaines visites (onglet « Espace perso »).
             try { localStorage.setItem("declicProfilId", profilId); } catch (e) {}
             document.getElementById("profil-frame").src = NOTION_PROFILE_URL;
         } else {
-            // Pas d'ID dans l'URL : on renvoie vers la page Espace perso classique.
+            // Pas d'ID : on renvoie vers la page Espace perso classique.
             window.location.replace("/espace-perso/");
         }
     </script>
