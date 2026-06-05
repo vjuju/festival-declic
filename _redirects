@@ -1,2 +1,3 @@
-# Sert espace-perso-app.html pour /espace-perso/ et /espace-perso/<slug> (réécriture, code 200)
-/espace-perso/*  /espace-perso-app.html  200
+# Réécriture transparente (200) vers la version SANS .html pour éviter
+# que Cloudflare ne redirige (308) et ne perde le slug de l'URL.
+/espace-perso/*  /espace-perso-app  200
