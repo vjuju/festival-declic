@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace perso — Festival Déclic</title>
+    <style>
+        html, body {
+            margin: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            box-sizing: border-box;
+            padding: 12px;
+        }
+
+        iframe {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+    <iframe id="profil-frame" allowfullscreen title="Espace perso — Festival Déclic"></iframe>
+
+    <script>
+        // Page Notion embarquée dans l'Espace perso (publiée sur le web).
+        var NOTION_PROFILE_URL = "https://onestpret.notion.site/37586e57ca1b81e2a75defff5550d222?v=37586e57ca1b80408f02000caaa6bad0";
+
+        // L'ID de profil est le dernier segment de l'URL : /profil/<profil-ID>
+        var segments = window.location.pathname.split("/").filter(Boolean); // ex. ["profil", "abc123"]
+        var profilId = segments[1] || "";
+
+        if (profilId) {
+            // On mémorise le profil pour les prochaines visites (onglet « Espace perso »).
+            try { localStorage.setItem("declicProfilId", profilId); } catch (e) {}
+            document.getElementById("profil-frame").src = NOTION_PROFILE_URL;
+        } else {
+            // Pas d'ID dans l'URL : on renvoie vers la page Espace perso classique.
+            window.location.replace("/espace-perso/");
+        }
+    </script>
+</body>
+</html>

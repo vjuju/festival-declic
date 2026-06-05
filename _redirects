@@ -1,0 +1,2 @@
+# Sert /profil/index.html pour toute URL /profil/<profil-ID> (réécriture, code 200)
+/profil/*  /profil/index.html  200

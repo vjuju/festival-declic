@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace perso — Festival Déclic</title>
+    <style>
+        html, body {
+            margin: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2d2d2d;
+        }
+
+        body {
+            box-sizing: border-box;
+            padding: 12px;
+        }
+
+        /* État « connecté » : l'embed prend toute la fenêtre */
+        #embed {
+            display: none;
+            height: 100%;
+        }
+
+        #embed iframe {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* État « pas encore d'espace » : message + liens vers les formulaires */
+        #message {
+            display: none;
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+            text-align: center;
+        }
+
+        #message h1 {
+            font-size: 2rem;
+            color: #1a1a2e;
+            margin-bottom: 1.5rem;
+        }
+
+        #message p {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 1.5rem;
+        }
+
+        #message .highlight {
+            background: #f8f9fa;
+            border-left: 4px solid #f5c542;
+            padding: 1rem 1.25rem;
+            border-radius: 6px;
+            text-align: left;
+        }
+
+        #message .actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        #message .btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            background: #f5c542;
+            color: #1a1a2e;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 50px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        #message .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(245, 197, 66, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div id="embed">
+        <iframe id="profil-frame" allowfullscreen title="Espace perso — Festival Déclic"></iframe>
+    </div>
+
+    <div id="message">
+        <h1>Espace perso</h1>
+        <div class="highlight">
+            <p style="margin:0;">
+                Si tu as déjà rempli le formulaire, retrouve le mail
+                <strong>« Ton espace perso »</strong> et clique sur le lien qu'il contient.
+            </p>
+        </div>
+        <p style="margin-top:2rem;">Sinon, remplis le formulaire&nbsp;:</p>
+        <div class="actions">
+            <a class="btn" href="/formulaire/intervenant-e/">Intervenant·e</a>
+            <a class="btn" href="/formulaire/participant-e/">Participant·e</a>
+        </div>
+    </div>
+
+    <script>
+        // Page Notion embarquée dans l'Espace perso (publiée sur le web).
+        var NOTION_PROFILE_URL = "https://onestpret.notion.site/37586e57ca1b81e2a75defff5550d222?v=37586e57ca1b80408f02000caaa6bad0";
+
+        var profilId = "";
+        try { profilId = localStorage.getItem("declicProfilId") || ""; } catch (e) {}
+
+        if (profilId) {
+            document.getElementById("profil-frame").src = NOTION_PROFILE_URL;
+            document.getElementById("embed").style.display = "block";
+        } else {
+            document.getElementById("message").style.display = "block";
+        }
+    </script>
+</body>
+</html>
