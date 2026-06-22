@@ -2,3 +2,7 @@
 node_modules/
 .wrangler/
 .claude/
+
+# Sources illustrations brutes (~150 Mo) — non déployées.
+# Le site utilise uniquement la version optimisée assets/illu-cover.jpg
+ILLUSTRATIONS/

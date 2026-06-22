@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Festival Déclic</title>
+    <meta name="theme-color" content="#3DA9E0">
     <link rel="preload" href="/fonts/Folsom-Black.otf" as="font" type="font/otf" crossorigin>
+    <link rel="preload" href="/assets/illu-cover.jpg" as="image">
     <style>
         @font-face {
             font-family: 'Folsom';
@@ -23,55 +25,105 @@
         }
 
         body {
-            background: #000;
-            color: #5ECBA1;
+            min-height: 100vh;
+            min-height: 100dvh;
+            color: #111;
             font-family: 'Folsom', Impact, sans-serif;
+            background: #3DA9E0 url('/assets/illu-cover.jpg') center / cover no-repeat;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 2rem;
-            min-height: 100vh;
+            justify-content: flex-end;
+            padding: clamp(1.5rem, 5vw, 4rem);
+            overflow: hidden;
+        }
+
+        .hero {
+            width: 100%;
+            max-width: 640px;
+            margin: 0 auto;
+            margin-bottom: clamp(3rem, 14vh, 9rem);
         }
 
         .title {
-            font-size: clamp(48px, 14vw, 160px);
+            text-transform: uppercase;
+            line-height: 0.86;
+            letter-spacing: -0.01em;
+        }
+
+        .title .festival {
+            display: block;
+            font-size: clamp(34px, 9vw, 78px);
+        }
+
+        .title .declic {
+            display: block;
+            font-size: clamp(58px, 16vw, 140px);
+            letter-spacing: -0.02em;
+        }
+
+        .dates {
+            display: inline-block;
+            margin-top: clamp(0.9rem, 3vw, 1.6rem);
+            padding: clamp(0.35em, 1.4vw, 0.5em) clamp(0.7em, 2.6vw, 1em);
+            background: #F47B97;
+            border-radius: 999px;
+            font-size: clamp(20px, 5.4vw, 46px);
             line-height: 1;
-            letter-spacing: -0.04em;
+            letter-spacing: 0.01em;
+        }
+
+        .location {
+            position: fixed;
+            left: clamp(1.5rem, 5vw, 4rem);
+            bottom: clamp(1.5rem, 5vw, 4rem);
+            font-size: clamp(13px, 3vw, 18px);
+            letter-spacing: 0.02em;
             text-transform: uppercase;
         }
 
-        .date {
-            margin-top: clamp(1rem, 3vw, 2rem);
-            font-size: clamp(18px, 5vw, 42px);
-            line-height: 1.2;
-            letter-spacing: 0.02em;
-        }
-
-        .espace-link {
-            position: fixed;
-            bottom: 1.25rem;
-            right: 1.5rem;
+        .pill-link {
             font-family: Arial, Helvetica, sans-serif;
             font-size: 0.8rem;
+            font-weight: 700;
             letter-spacing: 0.04em;
             text-transform: uppercase;
-            color: #5ECBA1;
-            opacity: 0.55;
+            color: #111;
             text-decoration: none;
-            transition: opacity 0.2s;
+            background: rgba(255, 255, 255, 0.65);
+            padding: 0.45em 0.9em;
+            border-radius: 999px;
+            transition: background 0.2s;
+            white-space: nowrap;
         }
 
-        .espace-link:hover {
-            opacity: 1;
+        .pill-link:hover {
+            background: #fff;
+        }
+
+        .nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: clamp(0.5rem, 2vw, 0.75rem);
+            margin-top: clamp(1.1rem, 3.5vw, 1.8rem);
         }
     </style>
 </head>
 <body>
-    <h1 class="title">Festival Déclic</h1>
-    <p class="date">29 juin 2026 – 1 juillet 2026</p>
+    <main class="hero">
+        <h1 class="title">
+            <span class="festival">Festival</span>
+            <span class="declic">Déclic</span>
+        </h1>
+        <p class="dates">01, 02, 03 juillet 2026</p>
 
-    <a class="espace-link" href="/espace-perso/">Espace perso</a>
+        <nav class="nav">
+            <a class="pill-link" href="/news">News</a>
+            <a class="pill-link" href="/plan">Plan</a>
+            <a class="pill-link" href="/programme" style="display: none;">Programme</a>
+            <a class="pill-link" href="/code">Code</a>
+        </nav>
+    </main>
+
+    <p class="location">Château de Misy-sur-Yonne (77)</p>
 </body>
 </html>
