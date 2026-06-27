@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Missions — Festival Déclic</title>
+    <meta name="theme-color" content="#3DA9E0">
+    <link rel="preload" href="/fonts/Folsom-Black.otf" as="font" type="font/otf" crossorigin>
+    <link rel="preload" href="/assets/illu-cover.jpg" as="image">
+    <style>
+        @font-face {
+            font-family: 'Folsom';
+            src: url('/fonts/Folsom-Black.otf') format('opentype');
+            font-display: swap;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #111;
+        }
+
+        body {
+            min-height: 100vh;
+            min-height: 100dvh;
+            background: #3DA9E0 url('/assets/illu-cover.jpg') center / cover no-repeat fixed;
+            padding: calc(56px + env(safe-area-inset-top)) clamp(10px, 3vw, 24px)
+                     calc(24px + env(safe-area-inset-bottom));
+        }
+
+        .back {
+            position: fixed;
+            top: calc(8px + env(safe-area-inset-top));
+            left: 10px;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            color: #111;
+            text-decoration: none;
+        }
+
+        .back svg { width: 26px; height: 26px; display: block; }
+
+        .wrap { max-width: 760px; margin: 0 auto; }
+
+        .page-title {
+            font-family: 'Folsom', Impact, sans-serif;
+            text-transform: uppercase;
+            font-size: clamp(2.4rem, 9vw, 4rem);
+            line-height: 0.9;
+            color: #111;
+            margin: 0.2rem 0 0.4rem;
+        }
+
+        .subtitle {
+            color: #fff;
+            font-size: 0.95rem;
+            margin-bottom: 1.4rem;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+        }
+
+        .mission {
+            background: rgba(255, 255, 255, 0.94);
+            border-radius: 14px;
+            margin-bottom: 0.6rem;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+        }
+
+        .mission summary {
+            list-style: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem 1.1rem;
+            font-weight: 700;
+            font-size: 1.05rem;
+            line-height: 1.25;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .mission summary::-webkit-details-marker { display: none; }
+        .m-title { flex: 1 1 auto; }
+
+        .chev {
+            width: 20px;
+            height: 20px;
+            flex: none;
+            color: #F47B97;
+            transition: transform 0.2s;
+        }
+        .mission[open] .chev { transform: rotate(180deg); }
+
+        .m-body {
+            padding: 0 1.1rem 1.15rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #222;
+        }
+
+        .block-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            margin: 0.6rem 0 0.4rem;
+        }
+
+        .m-body ol, .m-body ul {
+            margin: 0 0 0.4rem 1.2rem;
+        }
+        .m-body li { margin-bottom: 0.2rem; }
+
+        .sub {
+            font-weight: 700;
+            color: #2e9e6b;
+            margin: 0.8rem 0 0.3rem;
+        }
+
+        .note { margin: 0.5rem 0; }
+        .note b { color: #111; }
+
+        .meta {
+            margin-top: 0.9rem;
+            padding-top: 0.8rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .meta p { margin-bottom: 0.35rem; }
+        .meta .val { color: #B43A78; font-weight: 700; }
+    </style>
+</head>
+<body>
+    <a class="back" href="/" aria-label="Retour à l'accueil">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+    </a>
+
+    <div class="wrap">
+        <h1 class="page-title">Missions</h1>
+        <p class="subtitle">Touchez une mission pour voir son détail.</p>
+
+        <details class="mission">
+            <summary>
+                <span class="m-title">Mettre la table &amp; Amener les plats</span>
+                <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="m-body">
+                <p class="block-title">📜 Détail de la mission</p>
+                <ol>
+                    <li>Nettoyer les tables, vérifier leur placement et les assises</li>
+                    <li>Nettoyer et préparer les tables du buffet</li>
+                    <li>Déposer les assiettes, les bols et les couverts en nombre suffisant au buffet</li>
+                    <li>Amener tous les plats sur le buffet</li>
+                </ol>
+                <div class="meta">
+                    <p>📍 <b>On se retrouve où ?</b> <span class="val">Au Buffet</span></p>
+                    <p>🖐 <b>Personne référente :</b> <span class="val">Aelhia</span></p>
+                </div>
+            </div>
+        </details>
+
+        <details class="mission">
+            <summary>
+                <span class="m-title">Service à l'assiette</span>
+                <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="m-body">
+                <p class="block-title">📜 Détail de la mission</p>
+                <ol>
+                    <li>Préparation d'une assiette témoin en lien avec la cuisine</li>
+                    <li>Servir tout le monde avec un grand sourire :)</li>
+                </ol>
+                <div class="meta">
+                    <p>📍 <b>On se retrouve où ?</b> <span class="val">Au Buffet</span></p>
+                    <p>🖐 <b>Personne référente :</b> <span class="val">Aelhia</span></p>
+                </div>
+            </div>
+        </details>
+
+        <details class="mission">
+            <summary>
+                <span class="m-title">Rangement repas + Plonge cuisine</span>
+                <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="m-body">
+                <p class="block-title">📜 Détail de la mission</p>
+                <ol>
+                    <li>Amener tous les plats à la plonge</li>
+                    <li>Débarrasser et ranger les restes du repas</li>
+                    <li>Passer un coup sur les tables</li>
+                    <li>Aider à la plonge du repas en cuisine</li>
+                </ol>
+                <div class="meta">
+                    <p>📍 <b>On se retrouve où ?</b> <span class="val">Au Buffet</span></p>
+                    <p>🖐 <b>Personne référente :</b> <span class="val">Aelhia</span></p>
+                </div>
+            </div>
+        </details>
+
+        <details class="mission">
+            <summary>
+                <span class="m-title">Encadrement autowash</span>
+                <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="m-body">
+                <p class="block-title">⛲ Fonctionnement de l'autowash</p>
+                <p class="note"><b>4 lignes :</b></p>
+                <ul>
+                    <li>1 ligne allday — Tasses, verres et écocups uniquement (3 bacs)</li>
+                    <li>3 lignes — Toute la vaisselle (4 bacs par ligne)</li>
+                </ul>
+                <p class="note"><b>Les différents bacs :</b></p>
+                <ul>
+                    <li>0 : poubelle pour jeter les restes</li>
+                    <li>1 : bac eau chaude + liquide vaisselle : enlever le gras</li>
+                    <li>2 : bac eau chaude + liquide vaisselle : laver la vaisselle</li>
+                    <li>3 : bac eau vinaigre : 1er rinçage pour désinfecter</li>
+                    <li>4 : bac eau froide : 2nd rinçage</li>
+                </ul>
+
+                <p class="block-title">📜 Détail de la mission</p>
+                <ul>
+                    <li>Se répartir en 1 personne par ligne</li>
+                    <li>S'assurer que les personnes lavent bien leur vaisselle</li>
+                    <li>Ré-expliquer l'ordre des bacs si besoin</li>
+                    <li>Faire la vaisselle oubliée (à côté ou dans les bacs)</li>
+                </ul>
+                <p class="note"><b>Quand c'est trop sale, on change les bacs !</b></p>
+                <p class="note">On procède ligne par ligne pour avoir toujours 2 lignes en fonctionnement pour éviter les bouchons :</p>
+                <ul>
+                    <li>On vide le bac 1, on le lave, puis on le remplit d'eau froide + vinaigre</li>
+                    <li>Le bac 2 prend la place du bac 1 &gt; On ajoute du liquide vaisselle dedans</li>
+                    <li>Le bac 3 prend la place du bac 2</li>
+                </ul>
+                <p class="note">On prend une bouilloire pour ajouter de l'eau chaude et réchauffer les nouveaux bacs 1 et 2 (attention à avoir une eau tiède/chaude mais pas brûlante).</p>
+
+                <div class="meta">
+                    <p>📍 <b>On se retrouve où ?</b> <span class="val">Coin Eautowash</span></p>
+                    <p>🖐 <b>Personne référente :</b> <span class="val">Angèle &amp; Ulysse</span></p>
+                </div>
+            </div>
+        </details>
+
+        <details class="mission">
+            <summary>
+                <span class="m-title">Approvisionnement Zone Petit creux</span>
+                <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="m-body">
+                <p class="block-title">📜 Détail de la mission en fonction de l'horaire</p>
+
+                <p class="sub">➔ Zone Petit Creux 1 (Matin)</p>
+                <ol>
+                    <li>Compléter le nombre de tasses et verres (aller les chercher à l'autowash / finir de les sécher si besoin)</li>
+                    <li>Compléter le sucre et les laits végétaux</li>
+                    <li>Aller chercher en cuisine : les fruits et les condiments pour l'eau aromatisée</li>
+                    <li>Préparer les boissons fraîches (eaux aromatisées)</li>
+                    <li>Préparer le set Petit Creux</li>
+                </ol>
+
+                <p class="sub">➔ Zone Petit Creux 2 (Midi)</p>
+                <ol>
+                    <li>Préparer 3 percolateurs : café, kofé 532, tisane ! Commencer par ça</li>
+                    <li>Quand les percolateurs sont prêts, remplir les thermos</li>
+                    <li>Relancer 3 percolateurs : café, kofé 532, tisane !</li>
+                    <li>Aller chercher en cuisine : les fruits et les condiments pour l'eau aromatisée</li>
+                    <li>Compléter les eaux aromatisées</li>
+                    <li>Regarnir les fruits</li>
+                    <li>Compléter les tasses et verres</li>
+                    <li>Compléter le sucre et les laits végétaux</li>
+                    <li>Regarnir le set petit creux</li>
+                </ol>
+
+                <p class="sub">➔ Zone Petit creux 3 (Goûter)</p>
+                <ol>
+                    <li>Compléter les tasses et verres</li>
+                    <li>Compléter le sucre et les laits végétaux</li>
+                    <li>Préparer le set gros goûter (Cookies…)</li>
+                    <li>Aller chercher en cuisine : les fruits et les condiments pour l'eau aromatisée</li>
+                    <li>Compléter les eaux aromatisées</li>
+                    <li>Regarnir les fruits</li>
+                </ol>
+
+                <p class="sub">➔ Zone Petit Creux 4 (Fin d'aprem)</p>
+                <ol>
+                    <li>Compléter les verres</li>
+                    <li>Aller chercher en cuisine : les fruits et les condiments pour l'eau aromatisée</li>
+                    <li>Compléter les eaux aromatisées</li>
+                    <li>Regarnir les fruits</li>
+                </ol>
+
+                <div class="meta">
+                    <p>📍 <b>On se retrouve où ?</b> <span class="val">À la cuisine</span></p>
+                    <p>🖐 <b>Personne référente :</b> <span class="val">Aelhia</span></p>
+                </div>
+            </div>
+        </details>
+
+        <details class="mission">
+            <summary>
+                <span class="m-title">Clean des espaces de vie</span>
+                <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="m-body">
+                <p class="block-title">📜 Détail de la mission</p>
+                <ol>
+                    <li>Fais un petit tour de l'intégralité du lieu et :</li>
+                    <li>Ramène les tasses, écocup, vaisselle abandonnée à la ligne d'autowash</li>
+                    <li>Mets les objets abandonnés aux objets trouvés</li>
+                    <li>Jette ce qui a besoin d'être jeté à la poubelle</li>
+                    <li>Arrange les espaces pour qu'ils aient l'air accueillant (coussins, tissus, matériel utilisé…)</li>
+                </ol>
+                <div class="meta">
+                    <p>📍 <b>On se retrouve où ?</b> <span class="val">Retrouve ton groupe au buffet, et vous êtes en autonomie !</span></p>
+                    <p>🖐 <b>Personne référente :</b> <span class="val">Angèle</span></p>
+                </div>
+            </div>
+        </details>
+
+        <details class="mission">
+            <summary>
+                <span class="m-title">Vider les cendriers</span>
+                <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="m-body">
+                <p class="block-title">📜 Détail de la mission</p>
+                <ol>
+                    <li>Fais un tour du lieu et vide les cendriers</li>
+                    <li>Assure-toi qu'il y a des cendriers aux espaces concernés</li>
+                    <li>Ramasse les mégots abandonnés si tu en trouves !</li>
+                </ol>
+                <div class="meta">
+                    <p>📍 <b>On se retrouve où ?</b> <span class="val">Retrouve ton groupe au buffet, et vous êtes en autonomie !</span></p>
+                    <p>🖐 <b>Personne référente :</b> <span class="val">Angèle</span></p>
+                </div>
+            </div>
+        </details>
+
+        <details class="mission">
+            <summary>
+                <span class="m-title">Vigilance Réassort des plats</span>
+                <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="m-body">
+                <p class="block-title">📜 Détail de la mission</p>
+                <ol>
+                    <li>Avoir un œil sur le buffet et venir quand des plats sont vides</li>
+                    <li>Amener tous les plats vides à la plonge</li>
+                    <li>Remettre des plats sur le buffet</li>
+                </ol>
+                <div class="meta">
+                    <p>📍 <b>On se retrouve où ?</b> <span class="val">Au buffet</span></p>
+                    <p>🖐 <b>Personne référente :</b> <span class="val">Aelhia</span></p>
+                </div>
+            </div>
+        </details>
+
+        <details class="mission">
+            <summary>
+                <span class="m-title">Rassembler les poubelles du lieu et changer les sacs</span>
+                <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div class="m-body">
+                <p class="block-title">📜 Détail de la mission</p>
+                <ol>
+                    <li>Retrouve les bénévoles</li>
+                    <li>Récupère des sacs poubelles vides</li>
+                    <li>Fais le tour du lieu et change les poubelles</li>
+                    <li>Ramène les sacs poubelles pleins</li>
+                </ol>
+                <div class="meta">
+                    <p>📍 <b>On se retrouve où ?</b> <span class="val">À la cuisine</span></p>
+                    <p>🖐 <b>Personne référente :</b> <span class="val">Aelhia</span></p>
+                </div>
+            </div>
+        </details>
+    </div>
+</body>
+</html>

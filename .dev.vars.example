@@ -1,0 +1,9 @@
+# Token Notion — copier ce fichier en `.dev.vars` (non versionné) et renseigner la valeur.
+#
+# Utilisé par :
+#   - la fonction d'upload photo (functions/api/upload.js) en local
+#   - le script de build du programme (scripts/build-programme.mjs)
+#
+# Intégration interne Notion partagée avec la base « Programmation festival »
+# et la base des participants.
+NOTION_TOKEN="ntn_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"

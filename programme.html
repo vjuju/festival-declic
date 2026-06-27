@@ -5,12 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Programme — Festival Déclic</title>
     <meta name="theme-color" content="#3DA9E0">
+    <meta name="description" content="Programme du Festival Déclic 2026 — 39 activités.">
+    <!-- Page générée par scripts/build-programme.mjs — ne pas éditer à la main. -->
+    <!-- Dernière génération : 2026-06-27T13:02:40.795Z -->
+    <link rel="preload" href="/fonts/Folsom-Black.otf" as="font" type="font/otf" crossorigin>
     <link rel="preload" href="/assets/illu-cover.jpg" as="image">
     <style>
+        @font-face {
+            font-family: 'Folsom';
+            src: url('/fonts/Folsom-Black.otf') format('opentype');
+            font-display: swap;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         html, body {
-            height: 100%;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             color: #111;
         }
@@ -19,6 +28,8 @@
             min-height: 100vh;
             min-height: 100dvh;
             background: #3DA9E0 url('/assets/illu-cover.jpg') center / cover no-repeat fixed;
+            padding: calc(56px + env(safe-area-inset-top)) clamp(10px, 3vw, 24px)
+                     calc(24px + env(safe-area-inset-bottom));
         }
 
         .back {
@@ -37,54 +48,154 @@
 
         .back svg { width: 26px; height: 26px; display: block; }
 
-        /* --- Embed plein écran : 10px gauche/bas/droite, dégagement en haut pour le chevron --- */
-        #frame-wrap {
-            display: none;
-            position: fixed;
-            top: calc(52px + env(safe-area-inset-top));
-            right: 10px;
-            bottom: 10px;
-            left: 10px;
-            border-radius: 18px;
-            overflow: hidden;
-            background: #fff;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+        .wrap { max-width: 760px; margin: 0 auto; }
+
+        .page-title {
+            font-family: 'Folsom', Impact, sans-serif;
+            text-transform: uppercase;
+            font-size: clamp(2.4rem, 9vw, 4rem);
+            line-height: 0.9;
+            color: #111;
+            margin: 0.2rem 0 1.4rem;
         }
 
-        #frame-wrap iframe {
-            display: block;
+        .state {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.3rem;
+        }
+
+        .tab {
+            font-family: 'Folsom', Impact, sans-serif;
+            text-transform: uppercase;
+            font-size: clamp(1rem, 4.2vw, 1.5rem);
+            line-height: 1;
+            padding: 0.4em 0.85em;
+            border: 0;
+            border-radius: 999px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.7);
+            color: #111;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .tab:hover { background: rgba(255, 255, 255, 0.92); }
+        .tab.active { background: #F47B97; color: #111; }
+        .tab:active { transform: scale(0.97); }
+
+        .panel { display: none; }
+        .panel.active { display: block; }
+
+        .day {
+            font-family: 'Folsom', Impact, sans-serif;
+            text-transform: uppercase;
+            font-size: clamp(1.4rem, 5vw, 2rem);
+            color: #111;
+            margin: 0 0 0.9rem;
+        }
+
+        .card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(2px);
+            border-radius: 16px;
+            padding: 1rem 1.15rem;
+            margin-bottom: 0.7rem;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+            transition: background 0.2s;
+        }
+
+        .card.liked { background: #F9CEDA; }
+
+        .like {
+            position: absolute;
+            top: 0.7rem;
+            right: 0.7rem;
+            width: 36px;
+            height: 36px;
+            padding: 5px;
+            border: 0;
+            background: transparent;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .like svg {
             width: 100%;
             height: 100%;
-            border: 0;
+            display: block;
+            fill: none;
+            stroke: #E23E6A;
+            stroke-width: 1.8;
+            transition: fill 0.15s, transform 0.1s;
         }
 
-        /* --- Mobile / iOS : page sobre + bouton (l'iframe Notion plante sur Safari iOS) --- */
-        #intro {
-            display: none;
-            min-height: 100%;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: calc(5rem + env(safe-area-inset-top)) 1.5rem calc(2rem + env(safe-area-inset-bottom));
-            gap: 1.5rem;
+        .like:hover svg { fill: rgba(226, 62, 106, 0.18); }
+        .like:active svg { transform: scale(0.85); }
+        .card.liked .like svg { fill: #E23E6A; stroke: #E23E6A; }
+
+        .card-head {
+            display: flex;
+            align-items: baseline;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            padding-right: 2.4rem;
         }
 
-        #intro h1 {
-            font-size: clamp(2rem, 10vw, 3rem);
-            text-transform: uppercase;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 0.95rem 2.2rem;
-            background: #F47B97;
+        .time {
+            font-weight: 800;
+            font-size: 1.05rem;
             color: #111;
-            text-decoration: none;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+        }
+
+        .card-title {
             font-weight: 700;
             font-size: 1.1rem;
-            border-radius: 50px;
+            line-height: 1.2;
+            flex: 1 1 auto;
         }
+
+        .badges { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.55rem; }
+
+        .badge {
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            padding: 0.25em 0.7em;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+
+        .badge.espace { background: #3DA9E0; color: #fff; }
+        .badge.jauge { background: #8FCB8F; color: #0d2a0d; }
+
+        .intervenants { margin-top: 0.55rem; font-size: 0.92rem; color: #333; }
+        .intervenants b { color: #111; }
+
+        .desc {
+            margin-top: 0.55rem;
+            font-size: 0.95rem;
+            line-height: 1.45;
+            color: #222;
+            white-space: pre-line;
+        }
+
+        .source { margin-top: 0.65rem; font-size: 0.85rem; }
+        .source a { font-weight: 700; color: #1f6aa5; text-decoration: none; }
+        .source a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -94,28 +205,684 @@
         </svg>
     </a>
 
-    <main id="intro">
-        <h1>Programme</h1>
-        <a class="btn" href="https://onestpret.notion.site/38486e57ca1b808ca9ded27142afee65?v=38486e57ca1b804e82e0000c61291838">Ouvrir Programme</a>
-    </main>
+    <div class="wrap">
+        <h1 class="page-title">Programme</h1>
+        <div class="tabs" role="tablist" aria-label="Jours du festival">
+          <button class="tab active" role="tab" type="button" data-day="2026-06-29" aria-selected="true">29 juin</button>
+          <button class="tab" role="tab" type="button" data-day="2026-06-30" aria-selected="false">30 juin</button>
+          <button class="tab" role="tab" type="button" data-day="2026-07-01" aria-selected="false">1er juillet</button>
+        </div>
+        <section class="panel active" role="tabpanel" data-day="2026-06-29" aria-label="Lundi 29 juin">
+          <h2 class="day">Lundi 29 juin</h2>
+        <article class="card" data-id="36586e57-ca1b-8068-b38e-d40647583e26">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">15h00 – 16h30</span>
+            <span class="card-title">Cérémonie d'ouverture</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">La Turbine (Hall 1 Conférences principale))</span>
+            <span class="badge jauge">Jauge : TOUT LE MONDE</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Fleur Breteau (Cancer Colère) en live, Eva Morel (Quota Climat), Jordan Allouche (Ecolobby), Alexandre Golan, Hadi Rassi alias @ami_des_lobbies, Mariam Toure (La Jeunesse populaire @moimariamtoure), Priscillia Ludosky (CLSE), Alice Barbe (Académie des futurs leaders)</p>
+          <p class="source"><a href="https://antidote-le-jeu.net/" target="_blank" rel="noopener">https://antidote-le-jeu.net/</a> · <a href="https://www.instagram.com/reel/DZmH-phIH4D/?utm_source=ig_web_copy_link&amp;igsh=MzRlODBiNWFlZA%3D%3D" target="_blank" rel="noopener">https://www.instagram.com/reel/DZmH-phIH4D/?utm_source=ig_web_copy_link&amp;igsh=MzRlODBiNWFlZA==</a> · <a href="https://www.linkedin.com/in/jordan-allouche/" target="_blank" rel="noopener">https://www.linkedin.com/in/jordan-allouche/</a></p>
+        </article>
+        <article class="card" data-id="38886e57-ca1b-80c8-9699-ee8eb15132c0">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">17h00 – 18h15</span>
+            <span class="card-title">Faire la fête aux pesticides</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">La Turbine (Hall 1 Conférences principale))</span>
+            <span class="badge jauge">Jauge : 60</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Karine Jacquemart (Foodwatch), Lilith (DSAVEC), Lulu (Planète Boum Boum), Juliette Pauli (Greenpeace), Hélène Mocquillon  (générations futures)</p>
+          <p class="desc">Découvrez tous les secrets sur les pesticides qui nous entourent et mettent des vies en péril… et faites leur la fête en trouvant des slogans par équipe !</p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-80e5-affc-ce19cfd8cf06">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">17h00 – 18h00</span>
+            <span class="card-title">Racines Artivistes : L'art et l'influence au service de l'engagement</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Espace Mistral (Atelier 1 Hall 2)</span>
+            <span class="badge jauge">Jauge : 25</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Ulysse et Angèle du @lebruitquicourt</p>
+          <p class="desc">Soyons originales ! L'histoire regorge d'exemples de mobilisations créatives, s'inspirant de l'art et autres médias. 1h pour s'inspirer dans la joie, discuter d'actions peu communes et observer la complémentarité des modes d'actions !</p>
+          <p class="source"><a href="https://www.instagram.com/lebruitqui_court/" target="_blank" rel="noopener">Instagram</a></p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-80d3-84f4-e7fd267204c7">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">17h00 – 18h15</span>
+            <span class="card-title">Mains dans la terre - Lundi (animé par Céline)</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Potager</span>
+            <span class="badge jauge">Jauge : 25</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Céline (Maraichère du château)</p>
+          <p class="desc">Mettez les mains dans la terre avec cet atelier maraîchage animé par Céline, la maraichère  du château ! En petits groupes, elle vous fait découvrir son univers !</p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-80e0-aa1d-e39a4b497f58">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">19h00 – 19h45</span>
+            <span class="card-title">Apéro Bingo – précarité alimentaire</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">La Turbine (Hall 1 Conférences principale))</span>
+            <span class="badge jauge">Jauge : TOUT LE MONDE</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Maxime Ollivier, Emma Biard</p>
+          <p class="desc">BINGO ! Quoi de mieux qu’un bingo disco pour mieux comprendre les enjeux de précarité alimentaire, en groupe et en musique avec le soutien du Secours Catholique !</p>
+        </article>
+        </section>
+        <section class="panel" role="tabpanel" data-day="2026-06-30" aria-label="Mardi 30 juin">
+          <h2 class="day">Mardi 30 juin</h2>
+        <article class="card" data-id="38986e57-ca1b-8083-835b-d6a206f52174">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">10h00 – 11h00</span>
+            <span class="card-title">Mains dans la terre - mardi matin (animé par Ophélie)</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Potager</span>
+            <span class="badge jauge">Jauge : 25</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Ophélie Damblé alias  @ophelietamerenature</p>
+          <p class="desc">Mettez les mains dans la terre avec cet atelier maraîchage animé par @ophélietamèrenature, aussi experte en pépinières qu’en réseaux sociaux !</p>
+        </article>
+        <article class="card" data-id="38086e57-ca1b-80e2-9868-da8540865319">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">10h00 – 11h00</span>
+            <span class="card-title">Le pouvoir de l’entraide en temps de crise</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Espace Alizés (Atelier 2)</span>
+            <span class="badge jauge">Jauge : 25</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Sasha Cantet (Réseau des tempêtes), Agathe Dupureur (Réseau des tempêtes), Véronique De Geoffroy (URD)</p>
+          <p class="desc">Viens te former à l’entraide dans un atelier de coopération en tant que crise ! C’est le pari du think tank URD et le réseau des tempêtes, représenté par Sasha et Agathe et leadé par le chercheur Pablo Servigne, que bien s’entraider, c’est la manière la plus efficace d’affronter des crises.</p>
+        </article>
+        <article class="card" data-id="37286e57-ca1b-8001-8cc9-c425e6d75587">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">10h00 – 11h00</span>
+            <span class="card-title">Féministes à l'ère de la censure - comment se faire entendre quand on nous réduit au silence ?</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Espace Mistral (Atelier 1 Hall 2)</span>
+            <span class="badge jauge">Jauge : 30</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Anne-Cécile Mailfert (Fondation des femmes)</p>
+          <p class="desc">Sur les réseaux sociaux, les féministes dépendent de plateformes qui nous censurent : shadowban, censure des contenus, algorithmes qui freinent la viralisation des mobilisations. Comment, malgré tout, faire campagne, porter des affaires comme celle de Lyhanna et construire des luttes collectives ?</p>
+          <p class="source"><a href="https://fondationdesfemmes.org/" target="_blank" rel="noopener">Fondation des Femmes</a> · <a href="https://www.instagram.com/fondationdesfemmes/" target="_blank" rel="noopener">Instagram</a></p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-8013-97e6-ef9d8fe21d64">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">10h00 – 11h00</span>
+            <span class="card-title">Qui sont les responsables de notre empoisonnement ?</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">La Turbine (Hall 1 Conférences principale))</span>
+            <span class="badge jauge">Jauge : 25</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Soulèvement de la terre, Confédération paysanne, Cancer colère</p>
+          <p class="desc">Face à l’impunité des firmes de l’agrochimie, une composition d’organisations appelle à bloquer, occuper et désarmer les sites de production de pesticides responsables de l’empoisonnement généralisé.</p>
+          <p class="source"><a href="https://lessoulevementsdelaterre.org/" target="_blank" rel="noopener">lessoulevementsdelaterre.org</a> · <a href="https://www.bing.com/search?q=confederation%20paysanne&amp;qs=n&amp;form=QBRE&amp;sp=-1&amp;ghc=1&amp;lq=0&amp;pq=confederation%20paysanne&amp;sc=12-22&amp;sk=&amp;cvid=152527BE628B47A8BE32128EF8363B73" target="_blank" rel="noopener">bing.com/ck/a?!&amp;&amp;p=80a7881af0f516ce25f1d7d63a2dccba260e68c3d3a8d5a88e076d0adc9d19d4JmltdHM9MTc4MjQzMjAwMA&amp;ptn=3&amp;ver=2&amp;hsh=4&amp;fclid=063a2e34-f51a-659e-1a0b
+  • 385ff43f6437&amp;psq=confederation+paysanne&amp;u=a1aHR0cDovL2NvbmZlZGVyYXRpb25wYXlzYW5uZS5mci8&amp;ntb=1</a></p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-8042-848f-e6c35b396f0b">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">10h00 – 11h00</span>
+            <span class="card-title">Santé mentale, on en parle</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Moulin à paroles (Cercles de paroles)</span>
+            <span class="badge jauge">Jauge : 20</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Laura-Jane Gautier (genpsy)</p>
+          <p class="desc">Créer du contenu, c’est fantastique… mais c’est aussi parfois épuisant, surtout face aux enjeux actuels.
+Ce cercle de parole est un espace confidentiel et bienveillant pour déposer vos doutes, vos peurs et tout ce qui vous traverse. 
+Pas de jugement, pas non plus d’obligation de parler. Juste un moment pour se retrouver entre créateur·ices de contenu.</p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-8039-bb09-e22e0b776105">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">10h00 – 11h00</span>
+            <span class="card-title">Influence responsable : quelle éthique pour nos collabs ?</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Espace Mistral (Atelier 1 Hall 2)</span>
+            <span class="badge jauge">Jauge : 20</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Amélie Deloche alias @payetoninfluence</p>
+          <p class="desc">Une collaboration commerciale, ça vous engage. Amélie Deloche, cofondatrice de &quot;Paye ton influence&quot; et experte en influence responsable, vous aide à poser les bonnes questions : comment choisir ses partenaires, éviter le greenwashing et construire une audience qui vous fait vraiment confiance.</p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-8031-a64f-ff570beec07c">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">10h00 – 11h00</span>
+            <span class="card-title">Comm'un Français - Raconter la France qui nous rassemble</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Espace Mistral (Atelier 1 Hall 2)</span>
+            <span class="badge jauge">Jauge : 25</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Clémentine Guillebaud (Destin Commun)</p>
+          <p class="desc">Inspirez vous de données réelles et surprenantes sur les Français d'aujourd'hui pour contrer les récits de division et toucher des gens en dehors de votre bulle !</p>
+        </article>
+        <article class="card" data-id="36e86e57-ca1b-80de-b370-cb2c1be83564">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">11h30 – 12h30</span>
+            <span class="card-title">Parlons astronomie : A-t-on un plan B ?</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Alizés (Atelier 2)</span>
+            <span class="badge jauge">Jauge : 20</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Kevin Bastide alias @gdelaculturegeek</p>
+          <p class="desc">Kevin, astronome connu sous le nom @gdelaculturegeek nous emmène au fond de l'espace, à la recherche d'une autre planète habitable, une fois que nous en aurons fini avec la terre. Spoiler, ça va être plus dur que prévu, et il semble qu'il faille prendre soin de la planète que l'on a.</p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-8048-bca4-c193631e82cd">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">11h30 – 12h30</span>
+            <span class="card-title">L’alimentation : un droit pour toustes ?</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">La Turbine (Hall 1 Conférences principale))</span>
+            <span class="badge jauge">Jauge : 30</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Karine Jacquemart (Foodwatch), Hélène Quéau (Action Contre la Faim), Anissa Nebia (Ghett'up)</p>
+          <p class="desc">Qu’est-ce que le droit à l’alimentation ? 100 produits sains accessibles pour toustes dans les supermarchés ? Un droit reconnu pour toustes dans l’union européenne ?</p>
+          <p class="source"><a href="https://caravalim.org/?realisations-des-membres=#audio" target="_blank" rel="noopener">le site de Carav’alim</a> · <a href="https://res.cloudinary.com/actioncontrelafaim/images/v1758815380/uas-acf-prod/instit/municipales-2026-les-recommandations/municipales-2026-les-recommandations.pdf?_i=AA" target="_blank" rel="noopener">recommandations et exemples d’actions</a> · <a href="https://www.actioncontrelafaim.org/actualites/publication/droit-a-lalimentation-la-france-doit-se-mettre-a-table/" target="_blank" rel="noopener">« Droit à l’alimentation : la France doit se mettre à table »</a> · <a href="https://www.instagram.com/reel/DXE-u97Al8d/?utm_source=ig_web_copy_link&amp;igsh=MzRlODBiNWFlZA%3D%3D" target="_blank" rel="noopener">vidéo courte</a> · <a href="https://citizens-initiative.europa.eu/initiatives/details/2025/000002_fr" target="_blank" rel="noopener">– le lien vers le site de signature</a></p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-80df-9213-ded747aebe8d">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">11h30 – 12h30</span>
+            <span class="card-title">Eco-anxiété, actualité anxiogène : Balance ton flip</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Moulin à paroles (Cercles de paroles)</span>
+            <span class="badge jauge">Jauge : 15</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Paloma Baumgartner (makesense), Clémentine Prost (makesense)</p>
+          <p class="desc">Et sinon ça va comment ? Devant des températures qui grimpent, des relations internationales qui s’échauffent, des politiques qui s’embourbent, des idées qui se radicalisent, la question devient aussi inflammable qu’un barbecue en pleine pinède. Et si on en parlait enfin ?</p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-8095-8e8b-eadf84f4661b">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">11h30 – 12h30</span>
+            <span class="card-title">Le changement climatique est il sexiste ?</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Espace Mistral (Atelier 1 Hall 2)</span>
+            <span class="badge jauge">Jauge : 25</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Sophia Orachunwong-Pochet (les Impactrices)het, Alicia Lachaise-Kondracki (les Impactrices)</p>
+          <p class="source"><a href="https://www.bing.com/search?qs=HS&amp;pq=les%20impactr&amp;sk=CSYN1&amp;sc=11-11&amp;pglt=163&amp;q=les%20impactrices&amp;cvid=67b49c0381e543e5909c2ec1c06067de&amp;gs_lcrp=EgRlZGdlKgYIABBFGDsyBggAEEUYOzIGCAEQABhAMgYIAhAAGEAyBggDEAAYQDIGCAQQABhAMgYIBRAAGEAyBggGEEUYPTIGCAcQRRg9MgYICBBFGDzSAQgyMzk0ajBqN6gCALACAA&amp;FORM=ANNTA1&amp;PC=ACTS" target="_blank" rel="noopener">https://www.bing.com/search?qs=HS&amp;pq=les+impactr&amp;sk=CSYN1&amp;sc=11-11&amp;pglt=163&amp;q=les+impactrices&amp;cvid=67b49c0381e543e5909c2ec1c06067de&amp;gs_lcrp=EgRlZGdlKgYIABBFGDsyBggAEEUYOzIGCAEQABhAMgYIAhAAGEAyBggDEAAYQDIGCAQQABhAMgYIBRAAGEAyBggGEEUYPTIGCAcQRRg9MgYICBBFGDzSAQgyMzk0ajBqN6gCALACAA&amp;FORM=ANNTA1&amp;PC=ACTS</a> · <a href="https://www.instagram.com/lesimpactrices/" target="_blank" rel="noopener">Instagram</a></p>
+        </article>
+        <article class="card" data-id="38986e57-ca1b-8046-bb5e-faaf7144cab9">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">14h30 – 15h30</span>
+            <span class="card-title">Yellow cookies… des cookies du futur de l’agriculture</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Espace Mistral (Atelier 1 Hall 2)</span>
+            <span class="badge jauge">Jauge : 25</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Lan Anh Vu Hong (Les Greniers d'Abondance), Philippine De Lattre (Les Greniers d'Abondance)</p>
+          <p class="desc">Venez déguster le système alimentaire de demain. Découvrez avec Philippine et Lan Anh (Les Greniers d'Abondance) ce que l'alimentation fait à nos paysages, notre santé, et à nos sociétés. Dégustation de véritables cookies offerte.</p>
+          <p class="source"><a href="https://resiliencealimentaire.org/" target="_blank" rel="noopener">Les Greniers d'Abondance - vers la résilience alimentaire !</a></p>
+        </article>
+        <article class="card" data-id="36f86e57-ca1b-8006-a3eb-f83bef663cd3">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">14h30 – 15h30</span>
+            <span class="card-title">Cyberharcèlement : prévenir et riposter</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Espace Mistral (Atelier 1 Hall 2)</span>
+            <span class="badge jauge">Jauge : 20</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Maxime Doliveux alias @maxime_doliveux, Marie Cao alias @littlebunbao, Britanie Lenga alias @culturedoree</p>
+          <p class="desc">Meutes, commentaires coordonnés, messages privés… : le cyberharcèlement frappe particulièrement celles et ceux qui créent. 
+Entre vécu et droit, cet échange interactif victime/avocat donne des clés concrètes : prévenir, réagir quand l'attaque survient, et éviter le risque de participer, malgré soi, à un raid.</p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-80f4-912d-f1fb1b397075">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">14h30 – 15h30</span>
+            <span class="card-title">Balade botanique</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Potager</span>
+            <span class="badge jauge">Jauge : 25</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Ondine Martinez alias @coucoulesplantes</p>
+          <p class="desc">Viens découvrir la flore du château dans une balade avec Ondine alias @coucoulesplantes</p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-80aa-9bb5-e5b4623ce2fb">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">14h30 – 15h30</span>
+            <span class="card-title">Cercle de Parole - Engagement, légitimité : où en êtes-vous vraiment ?</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Moulin à paroles (Cercles de paroles)</span>
+            <span class="badge jauge">Jauge : 20</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Anastasia Dereppe alias @kosmo.gonia</p>
+          <p class="desc">Dans un contexte où les attentes envers les créateur·rices de contenu n'ont jamais été aussi fortes, s'engager peut vite sembler risqué, épuisant ou tout simplement réservé à celles et ceux qui se sentent légitimes pour le faire.
+Cette session propose un espace pour nommer ce que chacun·e vit vraiment, entre envie de s'engager, peur de se tromper &amp; questions sur sa propre légitimité, sans injonction ni jugement.
 
-    <div id="frame-wrap">
-        <iframe id="content-frame" allowfullscreen title="Programme — Festival Déclic"></iframe>
+À partir des expériences du groupe et d'un éclairage tiré de recherches sur les parcours d'engagement, on explorera ensemble ce qui retient, ce qui surprend, et ce qui aide à trouver un équilibre qui tient dans le temps.</p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-80e9-aca0-c1be24c60a3c">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">14h30 – 15h15</span>
+            <span class="card-title">Turbopoulets : les dessous de l’agro-industrie</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Espace Mistral (Atelier 1 Hall 2)</span>
+            <span class="badge jauge">Jauge : 25</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Axelle Playoust-Braure</p>
+          <p class="desc">Que se passe-t-il vraiment derrière Master Poulet ? Une journaliste a enquêté sur l’industrie du poulet en France et livre tous les détails de son livre choc dans ce témoignage…</p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-80c7-bd51-d045a5f86a6d">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">14h30 – 15h30</span>
+            <span class="card-title">Colonialisme chimique : comment les pesticides oppriment les peuples</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">La Turbine (Hall 1 Conférences principale))</span>
+            <span class="badge jauge">Jauge : 40</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Kim Vo Dinh (Vietnam Dioxine), Lilith (DSAVEC)</p>
+          <p class="desc">A travers le témoignage de deux experts militants, explorez les ravages du colonialisme chimique à travers les exemples du chlordécone aux Antilles et de l’agent orange pendant la guerre du Vietnam.</p>
+        </article>
+        <article class="card" data-id="38986e57-ca1b-80e7-981a-dcd84a82f878">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">16h30 – 17h30</span>
+            <span class="card-title">Mains dans la terre - mardi aprem (animé par Seid Djom d’A4)</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Potager</span>
+            <span class="badge jauge">Jauge : 25</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Seid Djom (A4)</p>
+          <p class="desc">Mettez les mains dans la terre avec cet atelier maraîchage animé par Saed de l’association A4, qui rassemble exilés et savoirs paysans !</p>
+        </article>
+        <article class="card" data-id="38086e57-ca1b-809a-a950-cf22b5ddaab3">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">16h30 – 17h30</span>
+            <span class="card-title">Comment défendre et renforcer la démocratie ?</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Espace Mistral (Atelier 1 Hall 2)</span>
+            <span class="badge jauge">Jauge : 30</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Armel Le Coz (Démocratie ouverte), Léa Chamboncel (Démocratie ouverrte)</p>
+          <p class="desc">Pourquoi la démocratie doit être l’enjeu central des prochaines élections ? Comment faire démocratie autrement ? Emparez-vous de l’agenda et des temps forts pour préserver la démocratie en 2027 !</p>
+        </article>
+        <article class="card" data-id="36f86e57-ca1b-800f-80ab-ceb53c5b4f73">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">16h30 – 17h30</span>
+            <span class="card-title">Croire en la Justice ?</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Forum Girouettes</span>
+            <span class="badge jauge">Jauge : 25</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Maxime Doliveux alias @maxime_doliveux</p>
+          <p class="desc">Mais que fait réellement la justice en France ? A cette  question qu’on entend souvent, Maxime Dolliveux répondra sans détour, nourri de son expérience de terrain : de l’école de la magistrature, et désormais avocat. La parole est à vous, pour lui poser toute vos questions sur la justice.</p>
+        </article>
+        <article class="card" data-id="36e86e57-ca1b-8077-b9f4-dcac4b537617">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">16h30 – 17h30</span>
+            <span class="card-title">A quoi ça sert d’aller voter ?</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Alizés (Atelier 2)</span>
+            <span class="badge jauge">Jauge : 25</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Yasmina Aksas (Cité des Chances), Aïnaa Abdallah (Ma Cité Va Voter), Caroline Span (A Voté)</p>
+          <p class="desc">Voter, mobiliser, convaincre — mais comment, et pourquoi maintenant ? Dans cet atelier en trois temps, blind test sur les luttes qui ont changé la loi, débat mouvant, puis brainstorm concret pour imaginer comment parler du vote à votre communauté, sans trahir votre ligne.</p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-80e7-b545-cc2a47d69446">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">16h30 – 17h30</span>
+            <span class="card-title">Des quartiers populaires aux ruralités : rassembler pour mieux régner</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">La Turbine (Hall 1 Conférences principale))</span>
+            <span class="badge jauge">Jauge : 30</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Achraf Manar (Destins liés), Manon Rousselot-Pailley (mrjcjeunesruraux)</p>
+          <p class="desc">Questionner le récit qui oppose deux France : la France des quartiers contre la “France périphérique oubliée”. Ces deux mondes sont pourtant liés par des enjeux communs : quels sont-ils ?</p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-8091-b435-ed7ad7f9f37f">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">16h30 – 17h30</span>
+            <span class="card-title">L'expérience du sexisme sur les réseaux sociaux, on en parle - mixité choisie</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Moulin à paroles (Cercles de paroles)</span>
+            <span class="badge jauge">Jauge : 25</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Facilitateurice OEP</p>
+          <p class="desc">Atelier en non mixité d’empouvoirement et mise en réseau entre créatrices</p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-8045-a4c9-f0a3298dbe3b">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">16h30 – 17h30</span>
+            <span class="card-title">Ma Voix Mon Choix : récit d'une victoire féministe</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">La Turbine (Hall 1 Conférences principale))</span>
+            <span class="badge jauge">Jauge : 25</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Sarah Durieux (My Voice My Choice)</p>
+          <p class="source"><a href="https://www.instagram.com/myvoicemychoiceorg/" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.instagram.com/sarah__durieux/" target="_blank" rel="noopener">Instagram</a></p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-8056-ae2d-e22ab14b5d57">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">19h30 – 20h30</span>
+            <span class="card-title">Apéro networking : temps de rencontre entre créateurices de contenu, marques et organisations</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">La Turbine (Hall 1 Conférences principale))</span>
+            <span class="badge jauge">Jauge : TOUT LE MONDE</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Partenaires financiers, Intervenants, Influs</p>
+          <p class="desc">Pendant l'apéro profitez d'un temps fun et informel pour échanger avec les partenaires du Festival engagés sur nos enjeux et avec qui de futurs collaborations pourraient voir le jour !</p>
+        </article>
+        </section>
+        <section class="panel" role="tabpanel" data-day="2026-07-01" aria-label="Mercredi 1er juillet">
+          <h2 class="day">Mercredi 1er juillet</h2>
+        <article class="card" data-id="38986e57-ca1b-8007-9b34-ef5a4c663aa3">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">10h30 – 11h30</span>
+            <span class="card-title">Mains dans la terre - Mercredi matin  (animé par Céline)</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Potager</span>
+            <span class="badge jauge">Jauge : 25</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Céline (Maraichère du château)</p>
+          <p class="desc">Mettez les mains dans la terre avec cet atelier maraîchage animé par la maraichère  du château ! En petits groupes, elle vous fait découvrir son univers !</p>
+        </article>
+        <article class="card" data-id="36d86e57-ca1b-80a0-b993-dbceb3be51bd">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">10h30 – 12h30</span>
+            <span class="card-title">Ateliers de l’espoir : uni· es face au fascisme</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Moulin à paroles (Cercles de paroles)</span>
+            <span class="badge jauge">Jauge : 25</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Margaux Braley (Atelier de l'espoir), Philippe Robert (Atelier de l'espoir), Basile Durand (Atelier de l'espoir)</p>
+          <p class="desc">Comment s'exerce notre démocratie ? Comment reconnaître les différentes formes du fascisme ? Les Ateliers de l'espoir visent à cultiver une posture optimiste et active face aux menaces fascistes qui pèsent sur notre démocratie, dans un format d'intelligence collective.</p>
+        </article>
+        <article class="card" data-id="36c86e57-ca1b-80d6-abb0-d91b03573cb5">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">10h30 – 12h30</span>
+            <span class="card-title">Et moi, je fais quoi pour 2027 ?</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Moulin à paroles (Cercles de paroles)</span>
+            <span class="badge jauge">Jauge : 25</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Armel Le Coz (Démocratie ouverte), Coline Serra @coline_serra_, Sarah Bennani (Jeunesse Populaire)</p>
+          <p class="desc">Comment peser vraiment sur la présidentielle de 2027 ? Cet atelier vous plonge dans les rouages d'une campagne — dynamiques culturelles, mobilisation électorale, scénarios politiques — avant de vous accompagner en petits groupes sur votre propre stratégie d'influence.</p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-805b-a06e-f7b7f78d0f76">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">10h30 – 12h30</span>
+            <span class="card-title">Danses rebelles</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">La Turbine (Hall 1 Conférences principale))</span>
+            <span class="badge jauge">Jauge : 25</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Antoine Delaunay (Corps et Graphies)</p>
+          <p class="desc">Vous atterrissez dans un futur dystopique au beau milieu d’une fête interdite… Danser devient alors un acte de résistance. Naviguant entre les époques et les pays, nous regardons comment les mouvements artistiques s’organisent pour résister, s’évader, tourner en dérision, afin de s'inspirer des luttes passées pour nos luttes futures.</p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-8075-98a7-e5bcf6a9fdb1">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">10h30 – 12h30</span>
+            <span class="card-title">Atelier debunk de fake news : Le tout-clim va nous sauver du réchauffement climatique</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Espace Mistral (Atelier 1 Hall 2)</span>
+            <span class="badge jauge">Jauge : 30</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Eva Morel (Quota Climat), Thibault Quere (Quota Climat)</p>
+          <p class="desc">“Le tout clim : la solution à la canicule” ? Pas vraiment. Quota Climat nous apprend à debunker cette fake news entendue dans les medias et nous forme à sa méthode pour la relayer efficacement sur les réseaux.</p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-80b0-ae8d-c8cd78f33c6c">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">14h00 – 15h00</span>
+            <span class="card-title">L'expérience du racisme sur les réseaux sociaux, on en parle - non mixité</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Moulin à paroles (Cercles de paroles)</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Yves Abanda</p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-80d7-b2fb-d686107b4377">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">14h00 – 15h00</span>
+            <span class="card-title">Médias indés vs médias des milliardaires</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Espace Mistral (Atelier 1 Hall 2)</span>
+            <span class="badge jauge">Jauge : TOUT LE MONDE</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Laura Quenneville (Coop-média), Mathieu Mollard (Street press), Clément Aulnette (MOB le média de la démocratie), Chaymaa Deb (L'Iceberg), Matthieu Combe (L'Iceberg)</p>
+          <p class="desc">A travers l’analyse de coop-media venez découvrir comment garantir une information indépendante et libre dans un monde où l’information est de plus en plus maitrisée par les milliardaires. Discutez avec 4 médias indépendants pour comprendre les enjeux et créer des ponts.</p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-8041-9d77-ec72a8e6b852">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">15h00</span>
+            <span class="card-title">Le coût de notre alimentation sur le festival</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">Cuisine</span>
+            <span class="badge jauge">Jauge : TOUT LE MONDE</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Aehlia (Bioscénie), Björg, Pauline (Bioscénie)</p>
+          <p class="desc">Combien a couté notre alimentation sur le festival ? Combien d’eau et de co2 on a économisé en mangeant vegé ? Bioscénie nous fait le calcul</p>
+        </article>
+        <article class="card" data-id="36586e57-ca1b-80c1-b7dd-d54331d244db">
+          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+          <div class="card-head">
+            <span class="time">15h30 – 16h15</span>
+            <span class="card-title">Cérémonie clôture</span>
+          </div>
+          <div class="badges">
+            <span class="badge espace">La Turbine (Hall 1 Conférences principale))</span>
+            <span class="badge jauge">Jauge : TOUT LE MONDE</span>
+          </div>
+          <p class="intervenants"><b>Avec</b> Karine Jacquemart (Foodwatch), Mathieu Mollard (Street press), Aehlia (Bioscénie), Pauline (Bioscénie)</p>
+        </article>
+        </section>
     </div>
 
     <script>
-        var EMBED = "https://onestpret.notion.site/ebd/38486e57ca1b808ca9ded27142afee65?v=38486e57ca1b804e82e0000c61291838";
+        (function () {
+            var tabs = [].slice.call(document.querySelectorAll(".tab"));
+            var panels = [].slice.call(document.querySelectorAll(".panel"));
+            if (!tabs.length) return;
 
-        var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-                    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-        var isSmall = window.matchMedia("(max-width: 820px)").matches;
+            function activate(key) {
+                tabs.forEach(function (t) {
+                    var on = t.dataset.day === key;
+                    t.classList.toggle("active", on);
+                    t.setAttribute("aria-selected", on ? "true" : "false");
+                });
+                panels.forEach(function (p) {
+                    p.classList.toggle("active", p.dataset.day === key);
+                });
+            }
 
-        if (isIOS || isSmall) {
-            document.getElementById("intro").style.display = "flex";
-        } else {
-            document.getElementById("content-frame").src = EMBED;
-            document.getElementById("frame-wrap").style.display = "block";
-        }
+            tabs.forEach(function (t) {
+                t.addEventListener("click", function () { activate(t.dataset.day); });
+            });
+
+            // Onglet ouvert par défaut : le jour courant (fuseau Europe/Paris),
+            // sinon le premier jour du festival.
+            var today = new Intl.DateTimeFormat("fr-CA", {
+                timeZone: "Europe/Paris", year: "numeric", month: "2-digit", day: "2-digit"
+            }).format(new Date());
+            var hasToday = tabs.some(function (t) { return t.dataset.day === today; });
+            activate(hasToday ? today : tabs[0].dataset.day);
+        })();
+
+        // --- Favoris : likés mémorisés en localStorage par id Notion ---
+        (function () {
+            var KEY = "declic:favoris";
+            var set;
+            try {
+                var saved = JSON.parse(localStorage.getItem(KEY));
+                set = new Set(Array.isArray(saved) ? saved : []);
+            } catch (e) {
+                set = new Set();
+            }
+
+            function save() {
+                try { localStorage.setItem(KEY, JSON.stringify([].slice.call(set))); } catch (e) {}
+            }
+
+            [].slice.call(document.querySelectorAll(".card")).forEach(function (card) {
+                var id = card.dataset.id;
+                var btn = card.querySelector(".like");
+                if (!id || !btn) return;
+
+                function sync() {
+                    var on = set.has(id);
+                    card.classList.toggle("liked", on);
+                    btn.setAttribute("aria-pressed", on ? "true" : "false");
+                    btn.setAttribute("aria-label", on ? "Retirer de mes favoris" : "Ajouter à mes favoris");
+                }
+
+                btn.addEventListener("click", function () {
+                    if (set.has(id)) set.delete(id); else set.add(id);
+                    save();
+                    sync();
+                });
+
+                sync();
+            });
+        })();
     </script>
 </body>
 </html>
