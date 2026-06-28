@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Cadre — Festival Déclic</title>
+    <meta name="theme-color" content="#3DA9E0">
+    <link rel="preload" href="/fonts/Folsom-Black.otf" as="font" type="font/otf" crossorigin>
+    <link rel="preload" href="/assets/illu-cover.jpg" as="image">
+    <style>
+        @font-face {
+            font-family: 'Folsom';
+            src: url('/fonts/Folsom-Black.otf') format('opentype');
+            font-display: swap;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #111;
+        }
+
+        body {
+            min-height: 100vh;
+            min-height: 100dvh;
+            background: #3DA9E0 url('/assets/illu-cover.jpg') center / cover no-repeat fixed;
+            padding: calc(56px + env(safe-area-inset-top)) clamp(10px, 3vw, 24px)
+                     calc(90px + env(safe-area-inset-bottom));
+        }
+
+        .back {
+            position: fixed;
+            top: calc(8px + env(safe-area-inset-top));
+            left: 10px;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            color: #111;
+            text-decoration: none;
+        }
+
+        .back svg { width: 26px; height: 26px; display: block; }
+
+        .wrap { max-width: 760px; margin: 0 auto; }
+
+        .page-title {
+            font-family: 'Folsom', Impact, sans-serif;
+            text-transform: uppercase;
+            font-size: clamp(2.2rem, 8vw, 3.6rem);
+            line-height: 0.9;
+            color: #111;
+            margin: 0.2rem 0 1.2rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.3rem;
+        }
+
+        .tab {
+            font-family: 'Folsom', Impact, sans-serif;
+            text-transform: uppercase;
+            font-size: clamp(0.95rem, 3.8vw, 1.4rem);
+            line-height: 1;
+            padding: 0.4em 0.85em;
+            border: 0;
+            border-radius: 999px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.7);
+            color: #111;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .tab:hover { background: rgba(255, 255, 255, 0.92); }
+        .tab.active { background: #F47B97; color: #111; }
+        .tab:active { transform: scale(0.97); }
+
+        .panel { display: none; }
+        .panel.active { display: block; }
+
+        .card {
+            background: rgba(255, 255, 255, 0.94);
+            border-radius: 16px;
+            padding: 1.2rem 1.25rem;
+            margin-bottom: 0.8rem;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #222;
+        }
+
+        .card h2 {
+            font-family: 'Folsom', Impact, sans-serif;
+            text-transform: uppercase;
+            font-size: clamp(1.2rem, 5vw, 1.7rem);
+            line-height: 1;
+            color: #111;
+            margin-bottom: 0.7rem;
+        }
+
+        .card h3 {
+            font-size: 1.05rem;
+            font-weight: 800;
+            margin: 1rem 0 0.4rem;
+        }
+
+        .card p { margin-bottom: 0.7rem; }
+        .card ul, .card ol { margin: 0 0 0.7rem 1.2rem; }
+        .card li { margin-bottom: 0.3rem; }
+        .card b { color: #111; }
+
+        .quote {
+            font-style: italic;
+            border-left: 4px solid #F47B97;
+            padding-left: 0.9rem;
+            margin: 0.2rem 0 1rem;
+            color: #444;
+        }
+
+        .contacts { width: 100%; border-collapse: collapse; margin: 0.4rem 0 0.8rem; }
+        .contacts td {
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            padding: 0.5rem 0.6rem;
+            vertical-align: top;
+            font-size: 0.9rem;
+        }
+        .contacts .who { font-weight: 800; white-space: nowrap; }
+        .contacts a { color: #B43A78; font-weight: 700; text-decoration: none; white-space: nowrap; }
+
+        .info { background: #FDEAF0; }
+
+        /* --- Bouton Urgence fixe --- */
+        .urgence {
+            position: fixed;
+            right: 14px;
+            bottom: calc(14px + env(safe-area-inset-bottom));
+            z-index: 60;
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            background: #E4002B;
+            color: #fff;
+            text-decoration: none;
+            padding: 0.4rem 1rem 0.4rem 0.4rem;
+            border-radius: 999px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            font-weight: 800;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            animation: pulse 2s infinite;
+        }
+
+        .urgence-ico {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            line-height: 1;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(228, 0, 43, 0.55); }
+            70% { box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), 0 0 0 16px rgba(228, 0, 43, 0); }
+            100% { box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(228, 0, 43, 0); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .urgence { animation: none; }
+        }
+    </style>
+</head>
+<body>
+    <a class="back" href="/" aria-label="Retour à l'accueil">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+    </a>
+
+    <div class="wrap">
+        <h1 class="page-title">Cadre</h1>
+
+        <div class="tabs" role="tablist" aria-label="Cadre du festival">
+            <button class="tab active" role="tab" type="button" data-tab="engagement" aria-selected="true">Engagement</button>
+            <button class="tab" role="tab" type="button" data-tab="cadre" aria-selected="false">Cadre</button>
+            <button class="tab" role="tab" type="button" data-tab="application" aria-selected="false">Application</button>
+        </div>
+
+        <!-- ===================== ENGAGEMENT ===================== -->
+        <section class="panel active" role="tabpanel" data-tab="engagement" aria-label="Notre engagement">
+            <div class="card">
+                <h2>Notre engagement dans la convergence des luttes</h2>
+                <p class="quote">« S'engager contre les oppressions, le racisme ou contre la violence ne signifie pas que l'on ne reproduira jamais des mécanismes de privilège ; cela signifie que, lorsqu'on se trompe, on est capable de le reconnaître et de réparer. » — Bell Hooks</p>
+
+                <p>Pendant ces trois jours, nous formons une communauté éphémère, engagée et apprenante.</p>
+                <p>Notre volonté de transformer la société ne nous rend pas immune aux dynamiques qui la traversent : racisme, sexisme, validisme, classisme, LGBTphobies, rapports de pouvoir, violences, exclusions ou humiliations. <b>Ces dynamiques peuvent aussi apparaître dans nos espaces militants, même lorsque nos intentions sont sincères.</b> Les réseaux sociaux amplifient ces violences pour beaucoup de créateur·ice·s de contenu qui subissent régulièrement le cyber-harcèlement et la cancel culture.</p>
+                <p><b>Nous voulons créer un cadre où les tensions et conflits nécessaires pour notre évolution collective peuvent être nommés, traversés et pris au sérieux, sans être évités ni minimisés.</b> Mais nous refusons aussi que ces situations deviennent des espaces d'escalade de la violence, d'humiliation publique, de dénonciation réflexe ou de sanction automatique.</p>
+                <p>Notre cadre collectif repose sur trois principes : <b>le consentement, la responsabilisation face à l'impact et la solidarité dans l'anti-oppression.</b></p>
+                <p>Cela signifie : écouter les personnes concernées, évaluer les besoins de sécurité, protéger les personnes exposées, encourager la reconnaissance des torts, chercher des réparations possibles, et prendre des mesures conséquentes lorsque le cadre collectif est menacé.</p>
+                <p>Nous savons que chacun·e arrive avec un niveau différent de conscience, d'expérience et de vocabulaire sur ces sujets. Ce cadre détaillé invite chacun·e à faire preuve d'attention, d'humilité et de responsabilité, afin que nous puissions vivre ensemble les moments puissants comme les moments plus difficiles.</p>
+                <p>L'objectif est de soutenir une culture politique exigeante : capable de prendre soin des personnes, de nommer les rapports de domination, d'apprendre de ses erreurs, et de rester tournée vers nos combats collectifs.</p>
+            </div>
+
+            <div class="card">
+                <h3>Une équipe Soin &amp; Oppressions Systémiques est disponible pendant le festival</h3>
+                <p>Pour signaler une situation, demander du soutien, être écouté·e, chercher une médiation, demander de l'aide face à un comportement oppressif ou violent, ou clarifier un malaise.</p>
+                <ul>
+                    <li><b>En personne</b>, je sollicite les membres de l'équipe Soin : ils portent un <b>gilet rose fluo</b>.</li>
+                    <li><b>En ligne</b>, je remplis le formulaire de signalement d'incident / demande de soutien (bouton <b>Urgence</b>).</li>
+                    <li>Je trouve refuge aux <b>espaces soin</b> si j'ai besoin de repos, de calme, de solitude ou d'écoute.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Contacts en cas d'urgence</h3>
+                <table class="contacts">
+                    <tr>
+                        <td class="who">Tish</td>
+                        <td>Référence soin</td>
+                        <td><a href="tel:+33750024395">+33 750 024 395</a></td>
+                    </tr>
+                    <tr>
+                        <td class="who">Yves</td>
+                        <td>Référence signalement, conflits</td>
+                        <td><a href="tel:+33749016804">+33 749 016 804</a></td>
+                    </tr>
+                    <tr>
+                        <td class="who">Barnier</td>
+                        <td>Régisseur général (problèmes techniques)</td>
+                        <td><a href="tel:+33672292117">+33 672 292 117</a></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="card info">
+                <h3>Accès aux vivres, pharmacie, hôpitaux</h3>
+                <p>(en km — minutes de voiture)</p>
+                <ul>
+                    <li><b>La gare</b> la plus proche est celle de Meulan (7 km — 11 min).</li>
+                    <li><b>L'hôpital</b> le plus proche est celui d'Aincourt (11 km — 18 min).</li>
+                    <li><b>Le magasin</b> le plus proche est Thaksin à Seraincourt (1,9 km — 4 min).</li>
+                    <li><b>La pharmacie</b> de Oinville la plus proche est à (4,6 km — 7 min).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ===================== CADRE ===================== -->
+        <section class="panel" role="tabpanel" data-tab="cadre" aria-label="Cadre du Déclic Festival">
+            <div class="card">
+                <h2>Cadre du Déclic Festival : consentement, responsabilisation, solidarité</h2>
+            </div>
+
+            <div class="card">
+                <h2>1. Solidarité &amp; anti-oppression</h2>
+                <p class="quote">« Désamorcez tous les conflits qui ne nous opposent pas à notre ennemi. » — Margaret Killjoy</p>
+
+                <h3>Solidarité face aux dynamiques interpersonnelles ET systémiques</h3>
+                <p>Les comportements discriminatoires ou violents — racistes, sexistes, sexuels, validistes, classistes, LGBTphobes, grossophobes ou autres — causent du tort et sont à prendre au sérieux. Ils doivent être nommés et adressés dans le cadre du festival.</p>
+                <p>Mais l'anti-oppression est avant tout un mouvement de libération collective. Comment pouvons-nous nous entraîner, dans cet espace, à faire front solidaire en vue de nos objectifs partagés de faire bouger les conditions systémiques qui génèrent la domination ? Et ce malgré les désaccords, l'ignorance, la souffrance et la polarisation des débats qui perpétuent nos conflits interpersonnels.</p>
+
+                <h3>Au sujet des personnes minorisées</h3>
+                <p><b>Notre intention est de construire un espace où l'on ne laisse pas les personnes minorisées porter seules la charge du soin, de l'éducation, de l'alerte ou de la réparation.</b></p>
+                <p>Cela implique de faire attention à la manière dont se répartissent :</p>
+                <ul>
+                    <li>la parole ; l'écoute ; la reconnaissance ;</li>
+                    <li>les opportunités ;</li>
+                    <li>le travail invisible ; le rangement, le soin, la logistique ;</li>
+                    <li>la charge d'expliquer les oppressions.</li>
+                </ul>
+                <p><b>Qui parle beaucoup ? Qui est interrompu·e ? Qui est cru·e spontanément ? Qui doit se justifier ? Qui prend soin des autres ? Qui nettoie, range, apaise, traduit, explique ?</b></p>
+                <p>Nous valorisons les vécus des personnes directement concernées, sans les enfermer dans ce rôle. Elles n'ont pas à représenter tout un groupe, à automatiquement parler en tant qu'expertes, ni à porter la charge d'éduquer les autres sans leur consentement.</p>
+                <p><b>Par exemple :</b> lors d'une table ronde, une personne minorisée peut parler de politique, de stratégie ou de création de contenu sans être ramenée automatiquement à son identité ou à son oppression. Pour une interview, une story ou un récap, j'évite les raccourcis du type « la personne noire sur le racisme » ou « la personne voilée sur la religion ». Je demande comment elle souhaite être présentée et sur quels sujets elle veut s'exprimer.</p>
+            </div>
+
+            <div class="card">
+                <h2>2. Consentement</h2>
+                <p>Le consentement est une pratique continue qui permet de coopérer malgré nos différences de perception, de pouvoir, de statut ou de visibilité.</p>
+                <p>Il ne concerne pas seulement les relations physiques ou sexuelles. Dans un festival d'influenceur·euses, <b>il concerne aussi la confidentialité, l'image, la captation, la diffusion de contenus, les discussions sensibles et les rapports de pouvoir.</b></p>
+                <p>Un consentement juste est :</p>
+                <ul>
+                    <li><b>Volontaire</b> : sans pression, insistance, manipulation, culpabilisation ou peur de représailles.</li>
+                    <li><b>Éclairé</b> : je sais à quoi je dis oui.</li>
+                    <li><b>Spécifique</b> : je peux dire oui à une chose et non à une autre.</li>
+                    <li><b>Réversible</b> : je peux changer d'avis.</li>
+                    <li><b>Continu</b> : je revérifie quand le contexte change.</li>
+                </ul>
+
+                <h3>Exemples concrets</h3>
+                <ul>
+                    <li><b>Intimité</b> : je demande avant de toucher quelqu'un, d'entrer dans une intimité physique, de draguer avec insistance, de poursuivre une interaction après un refus.</li>
+                    <li><b>Confidentialité</b> : je demande avant de raconter publiquement une histoire personnelle, une confidence, une situation de conflit ou un vécu d'oppression qui implique quelqu'un d'autre.</li>
+                    <li><b>Nudité</b> : je vérifie avec les personnes présentes avant de me dénuder partiellement.</li>
+                    <li><b>Publications</b> : je vérifie avant de publier un contenu marquant où d'autres personnes apparaissent ou sont identifiables.</li>
+                    <li><b>Statut &amp; coercition</b> : je fais attention aux rapports de pouvoir qui induisent facilement une pression à dire « oui » : notoriété, nombre d'abonné·e·s, statut professionnel, âge, accès aux opportunités, proximité avec l'organisation.</li>
+                </ul>
+
+                <h3>Bonnes pratiques à garder en tête</h3>
+                <ul>
+                    <li>« Est-ce que tu es ok avec ça ? »</li>
+                    <li>« Est-ce que je peux le partager ? »</li>
+                    <li>« Est-ce que tu veux que je coupe cette partie au montage ? »</li>
+                    <li>« Est-ce que tu préfères ne pas apparaître à l'image ? »</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>3. Responsabilisation face à l'impact</h2>
+                <p>La responsabilisation n'est pas une punition. <b>C'est une pratique d'intégrité, de soin et de réparation.</b> Elle signifie que je prends au sérieux l'impact de mes actes, paroles, oublis ou attitudes, même lorsque mon intention n'était pas de blesser.</p>
+                <p>Pendant le festival, je m'engage à :</p>
+                <ul>
+                    <li>Écouter les retours sans immédiatement chercher à me défendre, me justifier ou retourner la situation ;</li>
+                    <li>Reconnaître les torts lorsque j'en cause ;</li>
+                    <li>Chercher du soutien pour accueillir un retour difficile sans faire porter cette charge à la personne impactée ;</li>
+                    <li>Réparer lorsque c'est possible et souhaité ;</li>
+                    <li>Respecter les demandes de distance, de confidentialité ou de non-contact ;</li>
+                    <li>M'éduquer sur les sujets que je maîtrise mal, au lieu d'attendre des personnes concernées qu'elles fassent tout le travail pédagogique.</li>
+                </ul>
+
+                <h3>Exemples concrets</h3>
+                <ul>
+                    <li>J'ai fait une blague raciste, sexiste, validiste ou humiliante : je ne minimise pas avec « c'était juste de l'humour ». J'écoute, je reconnais l'impact, je m'excuse clairement et je modifie mon comportement.</li>
+                    <li>J'ai publié une story où quelqu'un·e apparaît sans accord et cela cause un impact : je la retire rapidement, je m'excuse, et je vérifie avant de republier.</li>
+                    <li>J'ai monopolisé un échange, coupé plusieurs personnes, ou utilisé ma notoriété pour imposer mon point de vue : je fais un pas de côté et je laisse de la place.</li>
+                    <li>J'ai insisté après un refus : j'arrête immédiatement, je respecte la limite, et je demande du soutien à l'équipe Soin / Oppressions systémiques si nécessaire.</li>
+                </ul>
+                <p>Nous reconnaissons la complexité du préjudice et savons que les auteur·ices de préjudices peuvent être des survivant·es et que les survivant·es peuvent être des auteur·ices.</p>
+                <p>Reconnaître les oppressions vécues par les personnes minorisées ne les place pas hors du champ de la responsabilité. Tout le monde peut se tromper, causer du tort, apprendre, reconnaître, réparer et être invité à la responsabilisation avec dignité et équité.</p>
+                <p>Que je sois la personne blessée, témoin, mise en cause, ou tout à la fois : l'équipe Soin &amp; Oppressions Systémiques peut soutenir ce processus : écoute, clarification, médiation, recherche de réparation, ou décision de mesures de protection.</p>
+            </div>
+        </section>
+
+        <!-- ===================== APPLICATION ===================== -->
+        <section class="panel" role="tabpanel" data-tab="application" aria-label="Application du cadre et lignes rouges">
+            <div class="card">
+                <h2>Application du cadre et lignes rouges</h2>
+            </div>
+
+            <div class="card">
+                <h3>Si j'observe une situation problématique</h3>
+                <p>Avant d'aller vers une dénonciation publique ou une escalade, je peux :</p>
+                <ul>
+                    <li>Vérifier si la personne impactée souhaite du soutien ;</li>
+                    <li>Intervenir simplement si la situation le permet : « Je ne suis pas à l'aise avec ce qui vient d'être dit » ;</li>
+                    <li>Proposer une pause ou une sortie de situation ;</li>
+                    <li>Aider la personne concernée à contacter l'équipe Soin / OpSys ;</li>
+                    <li>Signaler la situation à l'équipe (en personne ou par le formulaire) ;</li>
+                    <li>Éviter de relayer des accusations publiquement sans consentement ni vérification ;</li>
+                    <li>Ne pas transformer une situation sensible en contenu.</li>
+                </ul>
+                <p><b>Être témoin, ce n'est pas devenir juge. C'est contribuer à la sécurité et au soin du collectif.</b></p>
+                <p>La confidentialité sera respectée. Elle pourra toutefois être levée si un danger nécessite d'agir pour protéger une ou plusieurs personnes.</p>
+            </div>
+
+            <div class="card">
+                <h3>Limites non négociables</h3>
+                <p>Le festival ne tolère pas :</p>
+                <ul>
+                    <li>Le harcèlement, les humiliations ou les intimidations ;</li>
+                    <li>Les propos ou comportements discriminatoires répétés ou assumés ;</li>
+                    <li>Les violences physiques, sexuelles ou psychologiques ;</li>
+                    <li>L'insistance après un refus ;</li>
+                    <li>Les représailles contre une personne qui pose une limite ou signale une situation ;</li>
+                    <li>La captation ou diffusion d'images, de propos ou de situations sensibles sans consentement ;</li>
+                    <li>Le refus de coopérer avec l'équipe Soin / OpSys lorsqu'un tort est avéré ou qu'une mesure de protection est nécessaire.</li>
+                </ul>
+                <p>Selon la situation, l'équipe pourra proposer une médiation, demander une réparation, poser une limite claire, organiser une mise à distance temporaire, retirer un contenu diffusé, ou demander à une personne de quitter l'événement si sa présence crée un risque pour la dignité, la sécurité ou l'intégrité d'autrui.</p>
+            </div>
+
+            <div class="card">
+                <h3>Processus de réponse</h3>
+                <p>En cas de signalement ou de situation difficile, l'équipe Soin / OpSys cherchera à :</p>
+                <ol>
+                    <li>Écouter la ou les personnes concernées ;</li>
+                    <li>Évaluer l'urgence et les besoins de sécurité ;</li>
+                    <li>Protéger les personnes exposées ;</li>
+                    <li>Orienter vers les ressources adaptées si nécessaire ;</li>
+                    <li>Identifier un prochain pas de responsabilisation ou de réparation lorsque c'est possible ;</li>
+                    <li>Clarifier les conséquences si les actions convenues ne sont pas respectées ;</li>
+                    <li>Décider si une mesure immédiate est nécessaire pour préserver le cadre collectif.</li>
+                </ol>
+                <p><b>Notre priorité :</b> prendre soin des personnes, mettre les personnes impactées au centre du processus, éviter l'escalade, soutenir la responsabilisation, et maintenir un espace politique exigeant, digne et vivant.</p>
+                <p>Si vous avez besoin de signaler un incident, vous pouvez nous contacter :</p>
+                <ul>
+                    <li><b>En personne</b>, solliciter les membres de l'équipe Soin au <b>gilet rose fluo</b> ;</li>
+                    <li><b>En ligne</b>, remplir le formulaire de signalement d'incident / demande de soutien (bouton <b>Urgence</b>) ;</li>
+                    <li>Trouver refuge dans les <b>espaces soin</b> si besoin de repos, calme, solitude ou d'écoute.</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <a class="urgence" href="https://form.jotform.com/261657532477062" target="_blank" rel="noopener"
+       aria-label="Urgence — demander du soutien ou signaler un incident">
+        <span class="urgence-ico" aria-hidden="true">🚨</span>
+        <span>Urgence</span>
+    </a>
+
+    <script>
+        (function () {
+            var tabs = [].slice.call(document.querySelectorAll(".tab"));
+            var panels = [].slice.call(document.querySelectorAll(".panel"));
+
+            function activate(tab) {
+                tabs.forEach(function (t) {
+                    var on = t.dataset.tab === tab;
+                    t.classList.toggle("active", on);
+                    t.setAttribute("aria-selected", on ? "true" : "false");
+                });
+                panels.forEach(function (p) {
+                    p.classList.toggle("active", p.dataset.tab === tab);
+                });
+                window.scrollTo(0, 0);
+            }
+
+            tabs.forEach(function (t) {
+                t.addEventListener("click", function () { activate(t.dataset.tab); });
+            });
+        })();
+    </script>
+</body>
+</html>
