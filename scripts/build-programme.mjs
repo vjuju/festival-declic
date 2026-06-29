@@ -118,20 +118,31 @@ function renderCard(a) {
   const end = a.end ? new Date(a.end) : null;
   const horaire = end ? `${hhmm(start)} – ${hhmm(end)}` : hhmm(start);
 
-  const isConcert = /concert/i.test(a.titre || "");
-  let h = `        <article class="card${isConcert ? " concert" : ""}" data-id="${esc(a.id)}">\n`;
-  h += '          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">\n';
-  h += '            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>\n';
-  h += "          </button>\n";
+  const titre = a.titre || "";
+  const isConcert = /concert/i.test(titre);
+  const isRepas = /(d[ée]jeuner|d[îi]ner|petit[ -]*d[ée]j|brunch|go[ûu]ter)/i.test(titre);
+  const cls = "card" + (isConcert ? " concert" : "") + (isRepas ? " repas" : "");
+
+  let h = `        <article class="${cls}" data-id="${esc(a.id)}">\n`;
+  // Pas de favori sur les repas (cartes jaunes)
+  if (!isRepas) {
+    h += '          <button class="like" type="button" aria-pressed="false" aria-label="Ajouter à mes favoris">\n';
+    h += '            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>\n';
+    h += "          </button>\n";
+  }
   h += '          <div class="card-head">\n';
   h += `            <span class="time">${esc(horaire)}</span>\n`;
-  h += `            <span class="card-title">${esc(a.titre || "Activité")}</span>\n`;
+  h += `            <span class="card-title">${esc(titre || "Activité")}</span>\n`;
   h += "          </div>\n";
 
   if (a.espace || a.jauge) {
     h += '          <div class="badges">\n';
     if (a.espace) h += `            <span class="badge espace">${esc(a.espace)}</span>\n`;
-    if (a.jauge) h += `            <span class="badge jauge">Jauge : ${esc(a.jauge)}</span>\n`;
+    if (a.jauge) {
+      const toutLeMonde = a.jauge.trim().toLowerCase() === "tout le monde";
+      const jaugeLabel = toutLeMonde ? "🎉 tout le monde" : "Jauge : " + esc(a.jauge);
+      h += `            <span class="badge jauge">${jaugeLabel}</span>\n`;
+    }
     h += "          </div>\n";
   }
   if (a.intervenants.length) {
@@ -312,6 +323,8 @@ function page(body, count, stamp) {
 
         .card.concert { background: #FBD9A0; }
         .card.concert .time { color: #B5530A; }
+        .card.repas { background: #FBEF9C; }
+        .card.repas .time { color: #8A6D00; }
         .card.liked { background: #F9CEDA; }
 
         .like {
