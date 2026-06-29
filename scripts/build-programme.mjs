@@ -123,7 +123,8 @@ function renderCard(a) {
   const isConcert = /concert/i.test(titre);
   const isRepas = /(d[ée]jeuner|d[îi]ner|petit[ -]*d[ée]j|brunch|go[ûu]ter)/i.test(titre);
   const isCeremonie = /c[ée]r[ée]monie/i.test(titre);
-  const isHighlight = isConcert || isRepas || isCeremonie;
+  const isApero = /ap[ée]ro/i.test(titre);
+  const isHighlight = isConcert || isRepas || isCeremonie || isApero;
   const cls = "card" + (isHighlight ? " highlight" : "");
 
   let h = `        <article class="${cls}" data-id="${esc(a.id)}">\n`;
