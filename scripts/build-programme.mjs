@@ -73,22 +73,10 @@ function mapRow(row) {
     jauge: selectName(p["Jauge"]),
     intervenants,
     description: richText(p["description"]).trim() || richText(p["Description"]).trim(),
-    sources: cleanSources(p["sources"]),
+    ressources: (p["Ressources"]?.rich_text) || [],
     start: date?.start || null,
     end: date?.end || null,
   };
-}
-
-// Les champs « sources » sont souvent des gabarits vides « site :   insta : ».
-// On ne garde que les liens réellement présents.
-function cleanSources(p) {
-  const segs = p?.rich_text || [];
-  const links = [];
-  for (const s of segs) {
-    const href = s.href || s.text?.link?.url;
-    if (href) links.push({ label: (s.plain_text || href).trim() || href, href });
-  }
-  return links;
 }
 
 // --- Formatage / regroupement par jour (fuseau Europe/Paris) ---
@@ -112,6 +100,32 @@ const dayLabel = (d) => cap(fmtDay.format(d)).replace(/\b1 /, "1er ");
 const shortLabel = (d) => fmtShort.format(d).replace(/^1 /, "1er ");
 const esc = (s) =>
   String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+const linkAttrs = 'target="_blank" rel="noopener"';
+
+// Auto-lie, dans du texte brut (déjà échappé), les URLs et les @handles Instagram.
+function autoLink(escaped) {
+  return escaped
+    .replace(/(https?:\/\/[^\s<]+)/g, (u) => `<a href="${u}" ${linkAttrs}>${u}</a>`)
+    .replace(/@([a-zA-Z0-9._]+)/g,
+      (_, h) => `<a href="https://www.instagram.com/${h}/?hl=fr" ${linkAttrs}>@${h}</a>`);
+}
+
+// Rend la colonne « Ressources » : conserve les liens existants (segments avec href),
+// auto-lie les @handles/URLs du texte, et préserve les retours à la ligne.
+function ressourcesHtml(segs) {
+  let out = "";
+  for (const s of segs) {
+    const text = s.plain_text || "";
+    const href = s.href || s.text?.link?.url;
+    if (href) {
+      out += `<a href="${esc(href)}" ${linkAttrs}>${esc(text) || esc(href)}</a>`;
+    } else {
+      out += autoLink(esc(text));
+    }
+  }
+  return out.replace(/\n/g, "<br>");
+}
 
 function renderCard(a) {
   const start = new Date(a.start);
@@ -154,11 +168,11 @@ function renderCard(a) {
   if (a.description) {
     h += `          <p class="desc">${esc(a.description)}</p>\n`;
   }
-  if (a.sources.length) {
-    const links = a.sources
-      .map((l) => `<a href="${esc(l.href)}" target="_blank" rel="noopener">${esc(l.label)}</a>`)
-      .join(" · ");
-    h += `          <p class="source">${links}</p>\n`;
+  if (a.ressources.length) {
+    h += '          <details class="ressources">\n';
+    h += "            <summary>Ressources</summary>\n";
+    h += `            <div class="ressources-body">${ressourcesHtml(a.ressources)}</div>\n`;
+    h += "          </details>\n";
   }
   h += "        </article>\n";
   return h;
@@ -404,9 +418,34 @@ function page(body, count, stamp) {
             white-space: pre-line;
         }
 
-        .source { margin-top: 0.65rem; font-size: 0.85rem; }
-        .source a { font-weight: 700; color: #1f6aa5; text-decoration: none; }
-        .source a:hover { text-decoration: underline; }
+        .ressources { margin-top: 0.7rem; }
+        .ressources summary {
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            color: #1f6aa5;
+            list-style: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+        .ressources summary::-webkit-details-marker { display: none; }
+        .ressources summary::before {
+            content: "▸";
+            transition: transform 0.15s;
+            display: inline-block;
+        }
+        .ressources[open] summary::before { transform: rotate(90deg); }
+        .ressources-body {
+            margin-top: 0.4rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #222;
+        }
+        .ressources-body a { color: #1f6aa5; font-weight: 600; word-break: break-word; }
+        .ressources-body a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
